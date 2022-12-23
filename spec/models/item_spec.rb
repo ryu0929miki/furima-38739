@@ -1,17 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
-    describe '#create' do
+    
       before do
         @item = FactoryBot.build(:item)
         @item.image = fixture_file_upload("/wallpaperbetter.jpg")
       end
   
-      # 出品情報について
+    describe '商品情報入力' do
+        context '商品情報入力がうまくいく時' do
       it '必須項目を入力した上で出品ができる' do
         expect(@item).to  be_valid
       end
-  
+     end
+      context '商品情報の入力がうまく行かない時' do
       it '画像がないと登録できない' do
         @item.image = nil
         @item.valid?
@@ -89,5 +91,13 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include('Price Out of setting range')
       end
+        
+        it 'ユーザーが紐付いていなければ出品できない' do
+          @item.user = nil
+          @item.valid?
+          expect(@item.errors.full_messages).to include('User must exist')
+        end
+      end
     end
   end
+
