@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user! , only: [:new, :edit]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :require_login, only: :new, alert: 'You need to sign in or sign up before continuing.'
  
   def index
     @items = Item.all.order('created_at DESC')
@@ -46,7 +47,9 @@ class ItemsController < ApplicationController
 
   private
 
-  
+  def require_login
+    redirect_to user_session_path, alert: 'You need to sign in or sign up before continuing.' unless user_signed_in?
+  end
 
   def item_params
     params.require(:item).permit(:product_name, :explanation, :category_id, :delivery_charge_id, :shipping_day_id, :prefecture_id, :condition_id, :price, :image).merge(user_id: current_user.id)
