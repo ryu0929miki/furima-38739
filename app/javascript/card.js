@@ -20,7 +20,7 @@ const pay = () => {
    // 第一引数は15行目で定義したカード情報。第二関数はアロー関数を用いてPAYJP側からのレスポンス・ステータスコードを受け取った後の処理を定義
     Payjp.createToken(card, (status, response) => {
       if (status == 200) {
-        console.log(status)
+
         // response.idとすることでトークンの値を取得
         const token = response.id;
         // HTMLのinput要素にトークンの値を埋め込み、フォームに追加
